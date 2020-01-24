@@ -131,4 +131,5 @@ dmypy.json
 
 # others folder
 data
+references
 .vscode

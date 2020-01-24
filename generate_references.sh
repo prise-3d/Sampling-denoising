@@ -14,22 +14,15 @@ if [ -z "$2" ]
     exit 1
 fi
 
-if [ -z "$3" ]
-  then
-    echo "No argument supplied"
-    echo "Need nomber of images expected (1 samples images)"
-    exit 1
-fi
-
 prefix="p3d_"
 build_folder="rawls-tools/build"
 
 data_folder=$1
 output_folder=$2
-nb_elements=$3
 
 for folder_path in $(ls -d ${data_folder}*/)
 do
+  nb_elements=$(ls -l ${folder_path} | grep ${prefix} | wc -l)
 
   IFS='/' read -ra ADDR <<< "${folder_path}"
   folder=${ADDR[-1]}
@@ -43,22 +36,7 @@ do
     
     mkdir -p $output_scene_path_fixed
 
-    suffix=
-
-    for i in $(seq 1 ${nb_elements}); do
-
-        suffix=$i
-        size=${#suffix} 
-    
-        while [ $size -le 4 ]
-        do
-            suffix="0${suffix}"
-            size=${#suffix} 
-        done
-
-
-        ./${build_folder}/main/rawls_merge_mean --folder ${folder_path} --samples 1 --outfile $output_scene_path_fixed/${folder}_${suffix}.png --random 1
-    done
+    ./${build_folder}/main/rawls_merge_MON_incr --folder ${folder_path} --output $output_scene_path_fixed --step ${nb_elements} --random 0 --prefix ${folder} --max ${nb_elements} --extension "png"
       
   fi
 done
