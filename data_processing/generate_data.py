@@ -7,6 +7,8 @@ import random
 # image processing imports
 from PIL import Image
 
+
+# other params
 output_data_file_name = 'pixels_data.csv'
 
 
@@ -37,19 +39,19 @@ def get_adjacents_chanels(image, max_width, max_height, w, h, c):
 
     # get left pixel data
     if (h - 1) >= 0:
-        chanels_values_list.append(image[w][h - 1][c])
+        chanels_values_list.append(image[w][h - 1][c] / 255.)
 
     # get top pixel data
     if (w - 1) >= 0:
-        chanels_values_list.append(image[w - 1][h][c])
+        chanels_values_list.append(image[w - 1][h][c] / 255.)
 
     # get rifht pixel data
     if (h + 1) < max_height:
-        chanels_values_list.append(image[w][h + 1][c])
+        chanels_values_list.append(image[w][h + 1][c] / 255.)
 
     # get left pixel data
     if (w + 1) < max_width:
-        chanels_values_list.append(image[w + 1][h][c])
+        chanels_values_list.append(image[w + 1][h][c] / 255.)
 
     return chanels_values_list
 
@@ -66,7 +68,7 @@ def get_neighbord_chanels(image, max_width, max_height, w, h, c):
 
                 # check out of bounds
                 if (dw >= 0 and dw < max_width) and (dh >= 0 and dh < max_height):
-                    chanels_values_list.append(image[dw][dh][c])
+                    chanels_values_list.append(image[dw][dh][c] / 255.)
 
     return chanels_values_list
 
@@ -83,7 +85,7 @@ def get_remote_neighbors_channels(image, max_width, max_height, w, h, c):
 
                 # check out of bounds
                 if (dw >= 0 and dw < max_width) and (dh >= 0 and dh < max_height):
-                    chanels_values_list.append(image[dw][dh][c])
+                    chanels_values_list.append(image[dw][dh][c] / 255.)
 
     return chanels_values_list
 
@@ -171,7 +173,7 @@ def main():
                         data_line = data_line + str(reference_img[w, h, c] / 255.) + ';'
                         
                     # get `x` data from samples images
-                    for c in range(chanels):
+                    for index, c in enumerate(range(chanels)):
                         
                         current_pixel_samples = []
                         adjacent_pixels_samples = []
@@ -220,7 +222,11 @@ def main():
                         data_line = data_line + str(neighbors_pixels_std) + ';'
 
                         data_line = data_line + str(r_neighbors_pixels_mean) + ';'
-                        data_line = data_line + str(r_neighbors_pixels_std) + ';'
+                        data_line = data_line + str(r_neighbors_pixels_std)
+
+                        # if last element of line we do not add `;` char
+                        if index < chanels - 1:
+                            data_line = data_line + ';'
 
                     # first three values are `y` rgb references values, the others the `x` data
                     data_line = data_line + '\n'
