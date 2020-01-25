@@ -1,3 +1,3 @@
 [submodule "rawls-tools"]
 	path = rawls-tools
-	url = git@github.com:prise-3d/rawls-tools.git
+	url = https://github.com/prise-3d/rawls-tools.git
