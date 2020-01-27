@@ -72,7 +72,7 @@ def main():
     parser = argparse.ArgumentParser(description="Output data file")
 
     parser.add_argument('--folder', type=str, help="folder scenes pixels data")
-    parser.add_argument('--output', type=str, help='output folder where pxels scenes data will be saved')
+    parser.add_argument('--output', type=str, help='output model name')
     parser.add_argument('--batch_size', type=int, help='batch size used as model input', default=32)
     parser.add_argument('--epochs', type=int, help='number of epochs used for training model', default=30)
 
@@ -82,6 +82,9 @@ def main():
     p_output     = args.output
     p_batch_size = args.batch_size
     p_epochs     = args.epochs
+
+    test_split_ratio = 0.2
+    val_split_ratio = 0.3
     
     # default params
     initial_epoch = 0
@@ -105,8 +108,8 @@ def main():
     y_data = data.iloc[:, :3]
     x_data = data.iloc[:, 3:]
 
-    y_train, y_test = train_test_split(y_data, test_size=0.9)
-    x_train, x_test = train_test_split(x_data, test_size=0.9)
+    y_train, y_test = train_test_split(y_data, test_size=test_split_ratio)
+    x_train, x_test = train_test_split(x_data, test_size=test_split_ratio)
 
 
     # Restore model if exists
@@ -158,7 +161,7 @@ def main():
     model.summary()
 
     # Train the model, iterating on the data in batches of 32 samples
-    model.fit(x_train, y_train, validation_split=0.3, initial_epoch=initial_epoch, epochs=p_epochs, batch_size=p_batch_size, callbacks=callbacks_list)
+    model.fit(x_train, y_train, validation_split=val_split_ratio, initial_epoch=initial_epoch, epochs=p_epochs, batch_size=p_batch_size, callbacks=callbacks_list)
 
 
     # save the model into HDF5 file
