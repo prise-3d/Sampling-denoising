@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # main imports
 import sys, os
 import argparse
