@@ -144,7 +144,7 @@ def main():
             with open(outfile_path, 'r') as f:
                 nb_pixels = len(f.readlines())
 
-            print('`' + outfile_path + '` was already generated, (stopped at pixel n°' + str(nb_pixels) + ') check if necessary to continue...')
+            print(outfile_path + ' was already generated, (stopped at pixel n°' + str(nb_pixels) + ') check if necessary to continue...')
 
             # open in append mode
             f = open(outfile_path, 'a')
