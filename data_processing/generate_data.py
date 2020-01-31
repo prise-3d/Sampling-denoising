@@ -136,11 +136,26 @@ def main():
             os.makedirs(output_folder_path)
 
         outfile_path = os.path.join(output_folder_path, output_data_file_name)
-        f = open(outfile_path, 'w')
+
+        # check if file already exist and add missing pixels
+        nb_pixels = 0
+
+        if os.path.exists(outfile_path):
+            with open(outfile_path, 'r') as f:
+                nb_pixels = len(f.readlines())
+
+            print('`' + outfile_path + '` was already generated, (stopped at pixel n°' + str(nb_pixels) + ') check if necessary to continue...')
+
+            # open in append mode
+            f = open(outfile_path, 'a')
+        else:
+            f = open(outfile_path, 'w')
         
         # get all samples images path
         samples_images = os.listdir(scene_folder)
         samples_images_path = [ os.path.join(scene_folder, img) for img in samples_images ]
+
+        current_nb_pixels = 0
 
         for _ in range(p_nb):
 
@@ -165,6 +180,12 @@ def main():
             
             for w in range(width):
                 for h in range(height):
+
+                    # increase number of pixels
+                    current_nb_pixels = current_nb_pixels + 1
+
+                    if current_nb_pixels < nb_pixels:
+                        continue
                     
                     data_line = ""
                     # get reference pixels values
